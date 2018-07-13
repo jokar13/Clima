@@ -86,22 +86,31 @@ changeCityButton.setOnClickListener(new View.OnClickListener() {
     @Override
     protected void onResume() {
         super.onResume();
-
+        Log.d("Clima", "onResume() called");
         Intent myCity = getIntent();
         String city = myCity.getStringExtra("city");
 
-        Log.d("Clima", "onResume() called");
-        Log.d("Clima", "Getting weather for current location");
-        getWeatherForCurrentLocation();
-
+        if(city != null){
+            getWeatherForNewCity(city);
+        }
+        else {
+            Log.d("Clima", "Getting weather for current location");
+            getWeatherForCurrentLocation();
+        }
     }
 
 
     // TODO: Add getWeatherForNewCity(String city) here:
+    private  void getWeatherForNewCity(String city){
+        RequestParams params = new RequestParams();
+        params.put("q",city);
+        params.put("appid",APP_ID);
+
+        letsDoSomeNetworking(params);
+    }
 
 
     // TODO: Add getWeatherForCurrentLocation() here:
-
     private void getWeatherForCurrentLocation() {
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -184,6 +193,7 @@ changeCityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("Clima", "Success! JSON: " + response.toString());
+
                 WeatherDataModel weatherData = WeatherDataModel.fromJson(response);
                 updateUI(weatherData);
             }
@@ -202,7 +212,6 @@ changeCityButton.setOnClickListener(new View.OnClickListener() {
 
     // TODO: Add updateUI() here:
 
-
     private void updateUI(@Nullable WeatherDataModel weather) {
         mWeather = weather;
         mTemperatureLabel.setText(weather.getTemperature());
@@ -214,6 +223,5 @@ changeCityButton.setOnClickListener(new View.OnClickListener() {
 
 
     // TODO: Add onPause() here:
-
 
 }
