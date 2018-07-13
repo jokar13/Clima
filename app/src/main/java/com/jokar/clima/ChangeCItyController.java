@@ -1,10 +1,13 @@
 package com.jokar.clima;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class ChangeCItyController extends AppCompatActivity {
 
@@ -15,7 +18,7 @@ public class ChangeCItyController extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.change_city_layout);
 
-        EditText queryET = findViewById(R.id.queryET);
+        final EditText queryET = findViewById(R.id.queryET);
         ImageButton backButton = findViewById(R.id.backButton);
 
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -24,5 +27,23 @@ public class ChangeCItyController extends AppCompatActivity {
                 finish();
             }
         });
+
+
+        queryET.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                String newCity = queryET.getText().toString();
+                Intent newCityIntent = new Intent(ChangeCItyController.this,WeatherController.class);
+                newCityIntent.putExtra("city",newCity);
+                startActivity(newCityIntent);
+
+
+                return false;
+            }
+        });
     }
+
+
+
+
 }

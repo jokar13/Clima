@@ -2,6 +2,7 @@ package com.jokar.clima;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -73,7 +74,8 @@ public class WeatherController extends AppCompatActivity {
 changeCityButton.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View view) {
-
+        Intent myIntent = new Intent(WeatherController.this,ChangeCItyController.class);
+        startActivity(myIntent);
     }
 });
     }
@@ -84,6 +86,10 @@ changeCityButton.setOnClickListener(new View.OnClickListener() {
     @Override
     protected void onResume() {
         super.onResume();
+
+        Intent myCity = getIntent();
+        String city = myCity.getStringExtra("city");
+
         Log.d("Clima", "onResume() called");
         Log.d("Clima", "Getting weather for current location");
         getWeatherForCurrentLocation();
