@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -52,6 +53,7 @@ public class WeatherController extends AppCompatActivity {
     // TODO: Declare a LocationManager and a LocationListener here:
     LocationManager mLocationManager;
     LocationListener mLocationListener;
+    private WeatherDataModel mWeather;
 
 
     @Override
@@ -72,6 +74,7 @@ public class WeatherController extends AppCompatActivity {
 
 
     // TODO: Add onResume() here:
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -86,6 +89,7 @@ public class WeatherController extends AppCompatActivity {
 
 
     // TODO: Add getWeatherForCurrentLocation() here:
+
     private void getWeatherForCurrentLocation() {
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -160,6 +164,7 @@ public class WeatherController extends AppCompatActivity {
 
 
     // TODO: Add letsDoSomeNetworking(RequestParams params) here:
+
     private void letsDoSomeNetworking(RequestParams params) {
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(WEATHER_URL, params, new JsonHttpResponseHandler() {
@@ -168,6 +173,7 @@ public class WeatherController extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("Clima", "Success! JSON: " + response.toString());
                 WeatherDataModel weatherData = WeatherDataModel.fromJson(response);
+                updateUI(weatherData);
             }
 
             @Override
@@ -183,6 +189,16 @@ public class WeatherController extends AppCompatActivity {
     }
 
     // TODO: Add updateUI() here:
+
+
+    private void updateUI(@Nullable WeatherDataModel weather) {
+        mWeather = weather;
+        mTemperatureLabel.setText(weather.getTemperature());
+        mCityLabel.setText(weather.getCity());
+        int resourceID = getResources().getIdentifier(weather.getIconName(), "drawable", getPackageName());
+        mWeatherImage.setImageResource(resourceID);
+
+    }
 
 
     // TODO: Add onPause() here:
